@@ -22,6 +22,7 @@ export interface webhookMessageDto {
                         display_phone_number: string;
                         phone_number_id: string;
                     },
+                   
                     contacts: [
                         {
                             profile: {
@@ -43,9 +44,12 @@ export interface webhookMessageDto {
                             type: string;
 
                     }
-                ]
+                ],
+                    errors:[],
+                    statuses:[],
 
                 };
+
 
                   field: string;
 
