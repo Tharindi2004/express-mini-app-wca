@@ -1,9 +1,11 @@
 import { Request, Response } from "express";  
-import { WebhookVerificationDto, WebhookVerificationResponseDto } from "../dto/webhookVerification.dto";
+import { webhookMessageDto, WebhookVerificationDto, WebhookVerificationResponseDto } from "../dto/webhookVerification.dto";
 import { APP_CONFIG } from "../config/app.config";
+import { MessageService } from "./message.service";
 export class WebhookService {
 
     private static instance: WebhookService;
+    private messageService: MessageService;
 
     public static getInstance(): WebhookService {
         if (!WebhookService.instance) {
@@ -14,6 +16,8 @@ export class WebhookService {
     }
 
     private constructor() {
+        this.messageService = MessageService.getInstance();
+
 
     }
 
@@ -37,6 +41,22 @@ export class WebhookService {
             status: false,
             challenge: ''
          };
+    }
+
+    public async handleWebhookMessage(data: webhookMessageDto):Promise<boolean>{
+          const message = data.entry[0].changes[0].value.messages[0].text.body;
+        const phoneNumber = data.entry[0].changes[0].value.contacts[0].wa_id;
+        const type = data.entry[0].changes[0].value.messages[0].type;
+        const name = data.entry[0].changes[0].value.contacts[0].profile.name;
+
+        const replyMessage = `Hello ${name}, we have received your message`;
+        const isReplied = await this.messageService.sendMessage(phoneNumber, replyMessage);
+
+        if(isReplied){
+            return true;
+        }
+
+        return false;
     }
         }
 
