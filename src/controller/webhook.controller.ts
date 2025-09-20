@@ -47,19 +47,13 @@ export class WebhookController {
        //cnsole.log(JSON.stringify(req.body));
         const data = req.body as webhookMessageDto;
 
-        const message = data.entry[0].changes[0].value.messages[0].text.body;
-        const phoneNumber = data.entry[0].changes[0].value.contacts[0].wa_id;
-        const type = data.entry[0].changes[0].value.messages[0].type;
-        const name = data.entry[0].changes[0].value.contacts[0].profile.name;
-        console.log('===================================');
-        console.log(phoneNumber +" : "+message+" : "+type+" : "+name);
-        console.log(JSON.stringify(data.entry[0].changes[0].value.statuses));
-        console.log(JSON.stringify(data.entry[0].changes[0].value.errors));
-        console.log(JSON.stringify(data.entry[0].changes[0].value.contacts));
-        console.log(JSON.stringify(data.entry[0].changes[0].value.metadata));
-        console.log('===================================');
+       
+       
+        
 
-       const isReplied = await this.webhookService.handleWebhookMessage(data);
+       const isReplied = await this.webhookService.handleReceiveMessage(data);
+
+      
 
         if(isReplied){
             res.status(200).send('OK');
@@ -68,7 +62,7 @@ export class WebhookController {
             res.status(500).send('Error');
         }
 
-    
+       
     }
 
 
