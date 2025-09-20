@@ -29,6 +29,27 @@
                 },
                 "type": "text"
               }
+            ],
+            "statuses": [
+                {
+                    "id": "wamid.HBgLOTQ3MDEyNzg4NjUVAgARGBI0RjdDQjc3MUE4Q0JBMDlGMTAA",
+                    "status": "delivered",
+                    "timestamp": "1758378338",
+                    "recipient_id": "94701278865",
+                    "conversation": {
+                    "id": "7d8af8b35af4f2377a4595c08677fe2f",
+                    "expiration_timestamp":"1758378338",
+                    "origin": {
+                        "type": "service"
+                    }
+                    },
+                    "pricing": {
+                        "pricing_model": "PMP",
+                      "billable": false,
+                      "category": "service",
+                      "type": "free_customer_servicce"
+                    }
+                }
             ]
           },
           "field": "messages"
