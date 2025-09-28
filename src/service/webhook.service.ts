@@ -3,6 +3,7 @@ import { webhookMessageDto, WebhookVerificationDto, WebhookVerificationResponseD
 import { APP_CONFIG } from "../config/app.config";
 import { MessageService } from "./message.service";
  import { GeminiService } from "./gemini.service";
+import { IMessage, Role } from "../model/message.model";
  
 export class WebhookService {
 
@@ -59,7 +60,17 @@ export class WebhookService {
 
         try{
 
+
+            //extracting message from recieved notification via webhook
+            //this should be send to the AI model to genarate a reply
+
             const message = data.entry[0].changes[0].value.messages[0].text?.body;
+
+            
+
+            //this should be save to db
+            //then we need to retrieve the messages of that user
+
             if(message === undefined){
                 console.log('message is undefined');
                 console.log(JSON.stringify(data));
@@ -69,11 +80,30 @@ export class WebhookService {
              
              const phoneNumber = data.entry[0].changes[0].value.contacts[0].wa_id;
              const name = data.entry[0].changes[0].value.contacts[0].profile.name;
-
-
+             const history = await this.messageService.getMessageByUserId(phoneNumber);
         //const replyMessage = `Hello ${name}, Your Message Received`;
 
-             const replyMessage = await this.geminiService.generateReply(message);
+             const replyMessage = await this.geminiService.generateReply(message,history);
+
+             const now = new Date();
+
+             const newMessage: IMessage = {
+                 userId: phoneNumber,
+                 content: message,
+                 role: Role.USER,
+                 createdAt: now,
+                 updatedAt: now
+             };
+
+             const newReplyMessage: IMessage = {
+                userId: phoneNumber,
+                content: replyMessage,
+                role: Role.ASSISTANT,
+                createdAt: now,
+                updatedAt: now
+             };
+
+             await this.messageService.bulkCreateMessages([newMessage, newReplyMessage]);
 
              const isReplied = await this.messageService.sendMessage(phoneNumber, replyMessage);
              
