@@ -8,5 +8,6 @@ export const APP_CONFIG = {
     PORT : 8558,
     WEBHOOK_VERIFICATION_PASSWORD : process.env.WEBHOOK_VERIFICATION_PASSWORD,
     OPEN_AI_KEY : process.env.OPEN_AI_KEY,
-    GEMINI_API_KEY : process.env.GEMINI_API_KEY
+    GEMINI_API_KEY : process.env.GEMINI_API_KEY,
+    MONGO_URI: process.env.MONGO_URI || '',
 }   
